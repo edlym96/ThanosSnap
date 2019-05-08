@@ -11,6 +11,12 @@ body {
   background: #ddd;
 }
 
+.content .output{
+	border:1px solid red;
+	height:815px;
+	width:625px;
+}
+
 .upload{
 	display: flex;	
 	flex-direction: column;

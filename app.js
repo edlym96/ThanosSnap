@@ -1,15 +1,14 @@
 var imageDataArray = [];
 var canvasCount = 35;
+var BATCHES = 4;
 
-var loadFile = function(event) {
-	var image = document.getElementById('output');
-	image.src = URL.createObjectURL(event.target.files[0]);
-};
-
-$("#start-btn").click(function(){
-  
-  html2canvas($(".content")[0]).then(canvas => {
+function snap(){
+  html2canvas($(".content")[0], {
+  scale:1
+}).then(canvas => {
     //capture all div data as image
+    console.log("original width of canvas is " + canvas.width);	
+  	console.log("original height of canvas is " + canvas.height);
     ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var pixelArr = imageData.data;
@@ -21,20 +20,19 @@ $("#start-btn").click(function(){
       // Make a point to the most probable canvas in the array
       let a = imageDataArray[weightedRandomDistrib(p)];
       // Add those pixels into the array
-      a[i] = pixelArr[i];
-      a[i+1] = pixelArr[i+1];
-      a[i+2] = pixelArr[i+2];
-      a[i+3] = pixelArr[i+3]; 
+      for(let batch=0; batch<BATCHES; batch++){
+      	a[i+batch] = pixelArr[i + batch];	
+      };
     }
     //create canvas for each imageData and append to target element
     for (let i = 0; i < canvasCount; i++) {
       let c = newCanvasFromImageData(imageDataArray[i], canvas.width, canvas.height);
       c.classList.add("dust");
-      $("body").append(c);
+      $(".content").append(c);
     }
-    //clear all children except the canvas
-    $(".content").children().not(".dust").fadeOut(3500);
-    //apply animation
+    // clear all children except the canvas
+    $(".content").children().not(".dust").fadeOut(4500);
+    // apply animation
     $(".dust").each( function(index){
       animateBlur($(this),0.8,800);
       setTimeout(() => {
@@ -44,7 +42,12 @@ $("#start-btn").click(function(){
       $(this).delay(70*index).fadeOut((110*index)+800,"easeInQuint",()=> {$( this ).remove();});
     });
   });
-})
+}
+
+var loadFile = function(event) {
+	var image = document.getElementById('output');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};
 
 function weightedRandomDistrib(peak) {
   var prob = [], seq = [];
