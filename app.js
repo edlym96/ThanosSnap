@@ -1,6 +1,6 @@
 var imageDataArray = [];
-var canvasCount = 35;
-var BATCHES = 4;
+var canvasCount = 40;
+var RGBA = 4; //4 for each rgba channel
 
 function snap(){
   html2canvas($(".content")[0], {
@@ -12,14 +12,14 @@ function snap(){
     var pixelArr = imageData.data;
     createBlankImageData(imageData);
     //put pixel info to imageDataArray (Weighted Distributed)
-    for (let i = 0; i < pixelArr.length; i+=4) {
+    for (let i = 0; i < pixelArr.length; i+=RGBA) {
       //find the highest probability canvas the pixel should be in
       let p = Math.floor((i/pixelArr.length) *canvasCount);
       // Make a point to the most probable canvas in the array
       let a = imageDataArray[weightedRandomDistrib(p)];
       // Add those pixels into the array
-      for(let batch=0; batch<BATCHES; batch++){
-      	a[i+batch] = pixelArr[i + batch];	
+      for(let batch=0; batch<RGBA; batch++){
+      	a[i+batch] = pixelArr[i + batch];	//put in each of the rgba pixels into the array sequentially
       };
     }
     //create canvas for each imageData and append to target element
