@@ -11,11 +11,18 @@ body {
   background: #ddd;
 }
 
+.upload{
+	display: flex;	
+	flex-direction: column;
+	/*border:1px solid red;*/
+}
+
 .content {
   display: flex;
   align-items: center;
   flex-direction: column;
   background: #ddd;
+  /*border:1px solid blue;*/
 }
 
 #start-btn {

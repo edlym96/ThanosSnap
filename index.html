@@ -3,58 +3,23 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script type="text/javascript" src="app.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/chance/1.0.18/chance.min.js"></script>
 	<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>	
 	<title>Thanos Did Nothing Wrong</title>
 </head>
 <body>
-	<input type="file"  accept="image/gif, image/jpeg, image/png" name="image" id="file" onchange="loadFile(event)">
-	<p><label for="file" style="cursor: pointer;">Upload Image</label></p>
-	<div class="content">
-		<p><img id="output" width="200" crossorigin="Anonymous"/></p>
-		<button id="start-btn">Snap!</button>
+	<div class="main">
+		<div class="upload">
+		<input type="file"  accept="image/gif, image/jpeg, image/png" name="image" id="file" onchange="loadFile(event)">
+		</div>
+		<p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+		<div class="content">
+			<p><img id="output" width="200" crossorigin="Anonymous"/></p>
+			<button id="start-btn">Snap!</button>
+		</div>
 	</div>
 </body>
-<script>
-	$("#start-btn").click(function(){
-  
-  html2canvas($(".content")[0]).then(canvas => {
-    //capture all div data as image
-    ctx = canvas.getContext("2d");
-    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var pixelArr = imageData.data;
-    createBlankImageData(imageData);
-    //put pixel info to imageDataArray (Weighted Distributed)
-    for (let i = 0; i < pixelArr.length; i+=4) {
-      //find the highest probability canvas the pixel should be in
-      let p = Math.floor((i/pixelArr.length) *canvasCount);
-      let a = imageDataArray[weightedRandomDistrib(p)];
-      a[i] = pixelArr[i];
-      a[i+1] = pixelArr[i+1];
-      a[i+2] = pixelArr[i+2];
-      a[i+3] = pixelArr[i+3]; 
-    }
-    //create canvas for each imageData and append to target element
-    for (let i = 0; i < canvasCount; i++) {
-      let c = newCanvasFromImageData(imageDataArray[i], canvas.width, canvas.height);
-      c.classList.add("dust");
-      $("body").append(c);
-    }
-    //clear all children except the canvas
-    $(".content").children().not(".dust").fadeOut(3500);
-    //apply animation
-    $(".dust").each( function(index){
-      animateBlur($(this),0.8,800);
-      setTimeout(() => {
-        animateTransform($(this),100,-100,chance.integer({ min: -15, max: 15 }),800+(110*index));
-      }, 70*index); 
-      //remove the canvas from DOM tree when faded
-      $(this).delay(70*index).fadeOut((110*index)+800,"easeInQuint",()=> {$( this ).remove();});
-    });
-  });
-})
-</script>
 </html>
