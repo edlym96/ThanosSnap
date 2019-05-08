@@ -7,8 +7,6 @@ function snap(){
   scale:1
 }).then(canvas => {
     //capture all div data as image
-    console.log("original width of canvas is " + canvas.width);	
-  	console.log("original height of canvas is " + canvas.height);
     ctx = canvas.getContext("2d");
     var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     var pixelArr = imageData.data;
@@ -30,18 +28,30 @@ function snap(){
       c.classList.add("dust");
       $(".content").append(c);
     }
-    // clear all children except the canvas
-    $(".content").children().not(".dust").fadeOut(4500);
+    // clear all children except the canvas. Fade and not remove so doesnt mess up margins during animation
+    $(".content").children().not(".dust").fadeTo(3000, 0);
     // apply animation
-    $(".dust").each( function(index){
+    // Fade to so doesn't mess up margins during animation
+    $(".upload").fadeTo(500,0);
+    $(".dust").each(function(index){
       animateBlur($(this),0.8,800);
       setTimeout(() => {
         animateTransform($(this),100,-100,chance.integer({ min: -15, max: 15 }),800+(110*index));
       }, 70*index); 
       //remove the canvas from DOM tree when faded
-      $(this).delay(70*index).fadeOut((110*index)+800,"easeInQuint",()=> {$( this ).remove();});
+      $(this).delay(70*index).fadeOut((110*index)+800,"easeInQuint");
     });
-  });
+
+    // create the promise to handle the reappearance after the snapping is complete
+    $(".dust").promise().done(()=>{
+    	// finally remove once animations are complete
+    	$(".upload").remove();
+    	$(".content").remove();
+    	// $('#refresh-btn').css('display', 'flex');
+    	$('#refresh-btn').fadeIn(1000);
+    })
+    // $(".upload").fadeTo(500,1);
+  })
 }
 
 var loadFile = function(event) {

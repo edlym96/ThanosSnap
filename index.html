@@ -16,8 +16,11 @@
 		<input type="file"  accept="image/gif, image/jpeg, image/png" name="image" id="file" onchange="loadFile(event)">
 		</div>
 		<div class="content">
-			<p><img id="output" height=500 crossorigin="Anonymous"/></p>
+			<p><img id="output" crossorigin="Anonymous"/></p>
 			<button id="start-btn" onclick="snap()">Snap!</button>
+		</div>
+		<div class="refresh">
+			<button id="refresh-btn" onClick="location.href=location.href">Feeling Better?</button>
 		</div>
 	</div>
 </body>

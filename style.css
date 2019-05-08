@@ -11,10 +11,8 @@ body {
   background: #ddd;
 }
 
-.content .output{
-	border:1px solid red;
-	height:815px;
-	width:625px;
+.content #output{
+	max-height: 75vh;
 }
 
 .upload{
@@ -31,6 +29,12 @@ body {
   /*border:1px solid blue;*/
 }
 
+.refresh{
+	display: flex;	
+	flex-direction: column;
+	/*border:1px solid red;*/
+}
+
 #start-btn {
   font-size: 36px;
   padding: 20px 40px 20px 80px ;
@@ -38,6 +42,11 @@ body {
   border-radius: 10px;
   background:url("thanos_idle.png") white 15px no-repeat;
   background-size: 50px;
+}
+
+#refresh-btn{
+	display:none;
+	align-items: center;
 }
 
 .dust {
