@@ -7,7 +7,7 @@ var audio_dust = new Audio('thanos_dust.mp3');
 // var srcOrientation = 0;
 // Change canvasCount for phones to improve performance
 if(window.screen.width < 481){
-	canvasCount = 13;
+	canvasCount = 15;
 }
 
 // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -83,7 +83,7 @@ var loadFile = function(event) {
 	// image.src = URL.createObjectURL(event.target.files[0]);
 	console.log(event.target.files[0].size);
 	if(event.target.files[0].size > 1500000){
-		canvasCount = 10;
+		canvasCount = 13;
 	}
 	EXIF.getData(event.target.files[0], function () {
     	var srcOrientation = this.exifdata.Orientation;
