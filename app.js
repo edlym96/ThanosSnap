@@ -61,10 +61,10 @@ function snap(){
     $(".dust").each(function(index){
       animateBlur($(this),0.8,600);
       setTimeout(() => {
-        animateTransform($(this),100,-100,chance.integer({ min: -(0.16*Math.pow(index,1.2)+5), max: 0.16*Math.pow(index,1.2)+5 }),1200+(60*index));
-      }, 70*index); 
+        animateTransform($(this),100,-100,chance.integer({ min: -(0.18*Math.pow(index,1.2)+5), max: 0.18*Math.pow(index,1.2)+5 }),1200+(80*index));
+      }, 90*index); 
       //remove the canvas from DOM tree when faded
-      $(this).delay(50*index).fadeOut((100*index)+800,"easeInQuint");
+      $(this).delay(70*index).fadeOut((100*index)+800,"easeInQuint");
     });
     setTimeout(()=>{audio_dust.play()},1200);
     // create the promise to handle the reappearance after the snapping is complete
