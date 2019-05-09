@@ -1,8 +1,14 @@
 var imageDataArray = [];
-var canvasCount = 25;
 var RGBA = 4; //4 for each rgba channel
+var canvasCount = 25;
+
+// Change canvasCount for phones to improve performance
+if(window.screen.width < 481){
+	canvasCount = 15;
+}
 
 function snap(){
+	console.log(canvasCount);
   html2canvas($(".content")[0], {
   scale:1
 }).then(canvas => {
@@ -34,7 +40,7 @@ function snap(){
     // Fade to so doesn't mess up margins during animation
     $(".upload").fadeTo(500,0);
     $(".dust").each(function(index){
-      animateBlur($(this),0.8,1000);
+      animateBlur($(this),0.8,600);
       setTimeout(() => {
         animateTransform($(this),100,-100,chance.integer({ min: -15, max: 15 }),1200+(110*index));
       }, 70*index); 

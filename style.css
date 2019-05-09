@@ -4,7 +4,7 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +12,13 @@ body {
 }
 
 .content #output{
+	display:flex;
+	flex-direction: column;
 	max-height: 75vh;
+	max-width:100%;
+	margin:0px;
+	padding:0;
+	/*border:2px solid black;*/
 }
 
 .upload{
@@ -38,7 +44,7 @@ body {
 #start-btn {
   font-size: 36px;
   padding: 20px 40px 20px 80px ;
-  margin-top: 30px;
+  margin-top: 0;
   border-radius: 10px;
   background:url("thanos_idle.png") white 15px no-repeat;
   background-size: 50px;
