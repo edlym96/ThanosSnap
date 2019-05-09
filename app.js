@@ -7,8 +7,20 @@ var audio_snap = new Audio('thanos_snap.mp3');
 var audio_dust = new Audio('thanos_dust.mp3');
 // Change canvasCount for phones to improve performance
 if(window.screen.width < 481){
-	canvasCount = 15;
+	canvasCount = 18;
 }
+
+// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+let vh = window.innerHeight * 0.01;
+// Then we set the value in the --vh custom property to the root of the document
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+// We listen to the resize event
+window.addEventListener('resize', () => {
+  // We execute the same script as before
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
 
 function snap(){
 	$('#start-btn').attr("disabled", true);
@@ -46,12 +58,12 @@ function snap(){
     $(".dust").each(function(index){
       animateBlur($(this),0.8,600);
       setTimeout(() => {
-        animateTransform($(this),100,-100,chance.integer({ min: -0.2*Math.pow(index,1.3), max: 0.2*Math.pow(index,1.3) }),1200+(110*index));
+        animateTransform($(this),100,-100,chance.integer({ min: -(0.16*Math.pow(index,1.2)+5), max: 0.16*Math.pow(index,1.2)+5 }),1200+(60*index));
       }, 70*index); 
       //remove the canvas from DOM tree when faded
-      $(this).delay(50*index).fadeOut((110*index)+800,"easeInQuint");
+      $(this).delay(50*index).fadeOut((100*index)+800,"easeInQuint");
     });
-    setTimeout(()=>{audio_dust.play()},1000);
+    setTimeout(()=>{audio_dust.play()},1200);
     // create the promise to handle the reappearance after the snapping is complete
     $(".dust").promise().done(()=>{
     	// finally remove once animations are complete
