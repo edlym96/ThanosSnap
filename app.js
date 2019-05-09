@@ -1,5 +1,5 @@
 var imageDataArray = [];
-var canvasCount = 40;
+var canvasCount = 25;
 var RGBA = 4; //4 for each rgba channel
 
 function snap(){
@@ -29,17 +29,17 @@ function snap(){
       $(".content").append(c);
     }
     // clear all children except the canvas. Fade and not remove so doesnt mess up margins during animation
-    $(".content").children().not(".dust").fadeTo(3000, 0);
+    $(".content").children().not(".dust").fadeTo(1500, 0);
     // apply animation
     // Fade to so doesn't mess up margins during animation
     $(".upload").fadeTo(500,0);
     $(".dust").each(function(index){
-      animateBlur($(this),0.8,800);
+      animateBlur($(this),0.8,1000);
       setTimeout(() => {
-        animateTransform($(this),100,-100,chance.integer({ min: -15, max: 15 }),800+(110*index));
+        animateTransform($(this),100,-100,chance.integer({ min: -15, max: 15 }),1200+(110*index));
       }, 70*index); 
       //remove the canvas from DOM tree when faded
-      $(this).delay(70*index).fadeOut((110*index)+800,"easeInQuint");
+      $(this).delay(50*index).fadeOut((140*index)+1000,"easeInQuint");
     });
 
     // create the promise to handle the reappearance after the snapping is complete
