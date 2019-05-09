@@ -1,13 +1,13 @@
 // TODO: CHANGE THE IMPLMENTAITON TO USE EXIF TO FIX PICTURE ORIENTATION
-
 var imageDataArray = [];
 var RGBA = 4; //4 for each rgba channel
-var canvasCount = 25;
+var canvasCount = 20;
 var audio_snap = new Audio('thanos_snap.mp3');
 var audio_dust = new Audio('thanos_dust.mp3');
+// var srcOrientation = 0;
 // Change canvasCount for phones to improve performance
 if(window.screen.width < 481){
-	canvasCount = 18;
+	canvasCount = 13;
 }
 
 // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
@@ -23,6 +23,9 @@ window.addEventListener('resize', () => {
 });
 
 function snap(){
+	if($('#output').attr('src').length <= 0){
+		return;
+	}
 	$('#start-btn').attr("disabled", true);
 	audio_snap.play();
   html2canvas($('#output')[0], {
@@ -77,7 +80,59 @@ function snap(){
 
 var loadFile = function(event) {
 	var image = document.getElementById('output');
-	image.src = URL.createObjectURL(event.target.files[0]);
+	// image.src = URL.createObjectURL(event.target.files[0]);
+	console.log(event.target.files[0].size);
+	if(event.target.files[0].size > 1500000){
+		canvasCount = 10;
+	}
+	EXIF.getData(event.target.files[0], function () {
+    	var srcOrientation = this.exifdata.Orientation;
+    	console.log(srcOrientation);
+    	if(srcOrientation<2){
+    		image.src = URL.createObjectURL(event.target.files[0]);
+    		return;
+    	}
+    	var img = new Image();    
+		  img.onload = function() {
+		    var canvas = document.createElement('canvas'),
+		        ctx = canvas.getContext("2d");
+
+		        canvas.width  = img.width;
+			    canvas.height = img.height;
+			    ctx.save();
+			    var width  = canvas.width;  var styleWidth  = canvas.style.width;
+			    var height = canvas.height; var styleHeight = canvas.style.height;
+
+		    // set proper canvas dimensions before transform & export
+		    if (srcOrientation) {
+		      if (srcOrientation > 4) {
+		        canvas.width  = height; canvas.style.width  = styleHeight;
+		        canvas.height = width;  canvas.style.height = styleWidth;
+		      }
+		      switch (srcOrientation) {
+		      case 2: ctx.translate(width, 0);     ctx.scale(-1,1); break;
+		      case 3: ctx.translate(width,height); ctx.rotate(Math.PI); break;
+		      case 4: ctx.translate(0,height);     ctx.scale(1,-1); break;
+		      case 5: ctx.rotate(0.5 * Math.PI);   ctx.scale(1,-1); break;
+		      case 6: ctx.rotate(0.5 * Math.PI);   ctx.translate(0,-height); break;
+		      case 7: ctx.rotate(0.5 * Math.PI);   ctx.translate(width,-height); ctx.scale(-1,1); break;
+		      case 8: ctx.rotate(-0.5 * Math.PI);  ctx.translate(-width,0); break;
+		      }
+		    }
+
+		    // draw image
+		    ctx.drawImage(img, 0, 0);
+		    ctx.restore();
+    		var dataURL = canvas.toDataURL();
+		    image.src = dataURL;
+			}
+		img.src = URL.createObjectURL(event.target.files[0]);
+	});
+
+	// getOrientation(event.target.files[0], function(orientation) {
+ //        srcOrientation = orientation;
+ //        console.log(srcOrientation);
+ //    });
 };
 
 function weightedRandomDistrib(peak) {
@@ -141,4 +196,53 @@ function newCanvasFromImageData(imageDataArray ,w , h) {
       tempCtx.putImageData(new ImageData(imageDataArray, w , h), 0, 0);
       
   return canvas;
+}
+
+//function to get orientation
+function getOrientation(file, callback) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+
+        var view = new DataView(e.target.result);
+        if (view.getUint16(0, false) != 0xFFD8)
+        {
+            return callback(-2);
+        }
+        var length = view.byteLength, offset = 2;
+        while (offset < length) 
+        {
+            if (view.getUint16(offset+2, false) <= 8) return callback(-1);
+            var marker = view.getUint16(offset, false);
+            offset += 2;
+            if (marker == 0xFFE1) 
+            {
+                if (view.getUint32(offset += 2, false) != 0x45786966) 
+                {
+                    return callback(-1);
+                }
+
+                var little = view.getUint16(offset += 6, false) == 0x4949;
+                offset += view.getUint32(offset + 4, little);
+                var tags = view.getUint16(offset, little);
+                offset += 2;
+                for (var i = 0; i < tags; i++)
+                {
+                    if (view.getUint16(offset + (i * 12), little) == 0x0112)
+                    {
+                        return callback(view.getUint16(offset + (i * 12) + 8, little));
+                    }
+                }
+            }
+            else if ((marker & 0xFF00) != 0xFF00)
+            {
+                break;
+            }
+            else
+            { 
+                offset += view.getUint16(offset, false);
+            }
+        }
+        return callback(-1);
+    };
+    reader.readAsArrayBuffer(file);
 }

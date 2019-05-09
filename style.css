@@ -17,6 +17,7 @@ body {
 	display:flex;
 	flex-direction: column;
 	max-height: 75vh;
+	max-height: calc(var(--vh, 1vh) * 75);
 	max-width:100%;
 	margin:0px;
 	padding:0px;
@@ -27,6 +28,7 @@ body {
 	display: flex;	
 	flex-direction: column;
 	margin-bottom: 2vh;
+	margin-bottom: calc(var(--vh, 1vh) * 2);
 	/*border:1px solid red;*/
 }
 
@@ -51,6 +53,7 @@ body {
   font-size: 36px;
   padding: 20px 40px 20px 80px ;
   margin-top: 2vh;
+  margin-top: calc(var(--vh, 1vh) * 2);
   border-radius: 10px;
   background:url("thanos_idle.png") white 15px no-repeat;
   background-size: 50px;
