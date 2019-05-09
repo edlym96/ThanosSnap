@@ -1,15 +1,19 @@
+// TODO: CHANGE THE IMPLMENTAITON TO USE EXIF TO FIX PICTURE ORIENTATION
+
 var imageDataArray = [];
 var RGBA = 4; //4 for each rgba channel
 var canvasCount = 25;
-
+var audio_snap = new Audio('thanos_snap.mp3');
+var audio_dust = new Audio('thanos_dust.mp3');
 // Change canvasCount for phones to improve performance
 if(window.screen.width < 481){
 	canvasCount = 15;
 }
 
 function snap(){
-	console.log(canvasCount);
-  html2canvas($(".content")[0], {
+	$('#start-btn').attr("disabled", true);
+	audio_snap.play();
+  html2canvas($('#output')[0], {
   scale:1
 }).then(canvas => {
     //capture all div data as image
@@ -38,16 +42,16 @@ function snap(){
     $(".content").children().not(".dust").fadeTo(1500, 0);
     // apply animation
     // Fade to so doesn't mess up margins during animation
-    $(".upload").fadeTo(500,0);
+    $(".upload").fadeTo(400,0);
     $(".dust").each(function(index){
       animateBlur($(this),0.8,600);
       setTimeout(() => {
         animateTransform($(this),100,-100,chance.integer({ min: -0.2*Math.pow(index,1.3), max: 0.2*Math.pow(index,1.3) }),1200+(110*index));
       }, 70*index); 
       //remove the canvas from DOM tree when faded
-      $(this).delay(50*index).fadeOut((150*index)+800,"easeInQuint");
+      $(this).delay(50*index).fadeOut((110*index)+800,"easeInQuint");
     });
-
+    setTimeout(()=>{audio_dust.play()},1000);
     // create the promise to handle the reappearance after the snapping is complete
     $(".dust").promise().done(()=>{
     	// finally remove once animations are complete
@@ -56,7 +60,6 @@ function snap(){
     	// $('#refresh-btn').css('display', 'flex');
     	$('#refresh-btn').fadeIn(1000);
     })
-    // $(".upload").fadeTo(500,1);
   })
 }
 
