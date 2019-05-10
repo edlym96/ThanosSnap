@@ -1,9 +1,10 @@
-// TODO: CHANGE THE IMPLMENTAITON TO USE EXIF TO FIX PICTURE ORIENTATION
+// TODO: USE MEDIA QUERIES TO CHANGE SIZING FOR MOBILE
 var imageDataArray = [];
 var RGBA = 4; //4 for each rgba channel
 var canvasCount = 20;
 var audio_snap = new Audio('thanos_snap.mp3');
 var audio_dust = new Audio('thanos_dust.mp3');
+
 // var srcOrientation = 0;
 // Change canvasCount for phones to improve performance
 if(window.screen.width < 481){
@@ -21,6 +22,7 @@ window.addEventListener('resize', () => {
   let vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 });
+
 
 function snap(){
 	if($('#output').attr('src').length <= 0){
