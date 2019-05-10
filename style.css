@@ -10,6 +10,7 @@ body {
   justify-content: center;
   align-items: center;
   background: #ddd;
+  font-family: Verdana,Geneva,sans-serif;
 /*  border:2px solid black;*/
 }
 
@@ -67,7 +68,25 @@ body {
 
 #refresh-btn{
 	display:none;
-	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+  	align-items: center;
+  	background: white;
+  	border-radius: 10px;
+  	background-size: 100px;
+/*  	color:#A176EC;*/
+}
+
+.icon{
+	font-size: 50px;
+	/*border: 1px solid red;*/
+	margin:20px 0 10px 0;
+}
+
+#refresh-btn p{
+	font-size: 36px;	
+	/*border: 1px solid blue;*/
+	margin:0 5px 5px 5px;
 }
 
 .dust {

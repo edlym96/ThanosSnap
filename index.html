@@ -25,12 +25,15 @@
 			<button id="start-btn" onclick="snap()">Snap!</button>
 		</div>
 		<div class="refresh">
-			<button id="refresh-btn" onClick="location.href=location.href">Again?</button>
+			<button id="refresh-btn" onClick="location.href=location.href"><i class="fa fa-redo icon"></i><p>Inevitable</p></button>
 		</div>
 	</div>
 </body>
 <!-- have to put this script here so that it will knw the content class exists but before the page loads -->
 <script>
+	$("#refresh")
+    .css("display", "flex")
+    .hide()
 	if((bowser.name == "Chrome" ||bowser.name == "Safari") && $(window).width > 480){
 		$('.content').css({"display":"block"});
 		// document.getElementsByClassName("content").style.display = "block";
